@@ -1,12 +1,12 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY . .
 
-# Run the build
+# Build the project
 RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
 
-# Automatically find whatever .jar was created and rename it to app.jar
-RUN mv target/*.jar target/app.jar
+# Find the built jar, rename it to app.jar, and print directory contents to the log
+RUN cp target/*.jar ./app.jar && ls -la
 
 EXPOSE 8080
-CMD ["java", "-jar", "target/app.jar"]
+CMD ["java", "-jar", "app.jar"]
